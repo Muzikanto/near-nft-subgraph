@@ -1,0 +1,24 @@
+specVersion: 0.0.4
+schema:
+  file: ./schema.graphql
+features:
+  - ipfsOnEthereumContracts
+  - fullTextSearch
+dataSources:
+  - kind: near
+    name: Token
+    network: near-testnet
+    source:
+      account: "dev-1642764753920-49673943498154"
+      startBlock: 79575185
+    mapping:
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - Token
+        - Account
+        - Sale
+        - Fractionation
+      receiptHandlers:
+        - handler: handleReceipt
+      file: ./src/mapping.ts

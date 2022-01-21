@@ -1,0 +1,80 @@
+type _Schema_
+  @fulltext(
+    name: "tokenSearch"
+    language: en
+    algorithm: rank
+    include: [{ entity: "Token", fields: [{ name: "ownerId" }] }]
+  )
+
+
+type TokenMetadata @entity {
+  id: ID!
+  title: String
+  decsription: String
+  media: String
+
+  #
+
+  tokenId: String!
+  token: Token!
+}
+
+type Token @entity {
+  id: ID!
+  ownerId: String!
+  tokenId: String!
+  metadata: TokenMetadata @derivedFrom(field: "token")
+
+  saleId: String
+  # royalty: {str: str}
+
+  collection: String
+  tokenType: String
+  rarity: String
+
+  bindToOwner: Boolean
+  locked: Boolean
+
+  fractionationId: String
+
+  #
+
+  owner: Account!
+  sale: Sale
+  fractionation: Fractionation
+}
+
+type Account @entity {
+  id: ID!
+
+  #
+
+  tokens: [Token!]! @derivedFrom(field: "owner")
+}
+
+type Sale @entity {
+  id: ID!
+  name: String!
+  amount: Int!
+  price: String!
+  buyMax: Int!
+  perTransactionMin: Int!
+  perTransactionMax: Int!
+  notMinted: Int!
+  locked: Boolean!
+  startDate: BigInt
+
+  #
+
+  tokens: [Token!]! @derivedFrom(field: "sale")
+}
+
+type Fractionation @entity {
+  id: ID!
+  tokenId: String!
+  tokenIds: [String!]!
+
+  #
+
+  tokens: [Token!]! @derivedFrom(field: "fractionation")
+}
